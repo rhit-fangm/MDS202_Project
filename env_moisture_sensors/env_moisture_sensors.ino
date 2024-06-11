@@ -77,8 +77,8 @@ void loop() {
     sum+=nums[i];
   }
   avg=sum/10;
+  Serial.print("Moisture (avg): ");
   Serial.println(avg);
-
 
   Serial.print(F("Humidity: "));
   Serial.print(h);
