@@ -32,11 +32,6 @@
 DHT dht(DHTPIN, DHTTYPE);
 
 int light_val;
-float sumh = 0;
-float sumt = 0;
-float sumf = 0;
-float sum_light_val = 0;
-
 
 void setup() {
   pinMode(A0, INPUT);
@@ -48,42 +43,42 @@ void setup() {
 
 void loop() {
   // Wait a few seconds between measurements.
+  delay(500);
+  // Reading temperature or humidity takes about 250 milliseconds!
+  // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
+  float h = dht.readHumidity();
+  // Read temperature as Celsius (the default)
+  float t = dht.readTemperature();
+  // Read temperature as Fahrenheit (isFahrenheit = true)
+  float f = dht.readTemperature(true);
 
-  for(int i == 0; i =< 3; i++){
-    delay(2000);
+  // Check if any reads failed and exit early (to try again).
+  if (isnan(h) || isnan(t) || isnan(f)) {
+    Serial.println(F("Failed to read from DHT sensor!"));
+    return;
+  }
+
+  for (int i = 0; i < 10; i++) {
+    delay(1000);
 
     // Reading temperature or humidity takes about 250 milliseconds!
     // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
-    float h = dht.readHumidity();
+    h += dht.readHumidity();
     // Read temperature as Celsius (the default)
-    float t = dht.readTemperature();
+    t += dht.readTemperature();
     // Read temperature as Fahrenheit (isFahrenheit = true)
-    float f = dht.readTemperature(true);
-
-    // Check if any reads failed and exit early (to try again).
-    if (isnan(h) || isnan(t) || isnan(f)) {
-      Serial.println(F("Failed to read from DHT sensor!"));
-      return;
-    }
-
-    // Compute heat index in Fahrenheit (the default)
-    float hif = dht.computeHeatIndex(f, h);
-    // Compute heat index in Celsius (isFahreheit = false)
-    float hic = dht.computeHeatIndex(t, h, false);
-
-    light_val = analogRead(PHOTORES);
-
-    sumh += h;
-    sumt += t;
-    sumf += f;
-    sum_light_val += light_val;
-
+    f += dht.readTemperature(true);
   }
-  h = sumh/3;
-  t = sumt/3;
-  f = sumf/3;
-  light_val = sum_light_val/3;
+  h = h/10;
+  t = t/10;
+  f = f/10;
 
+  // Compute heat index in Fahrenheit (the default)
+  float hif = dht.computeHeatIndex(f, h);
+  // Compute heat index in Celsius (isFahreheit = false)
+  float hic = dht.computeHeatIndex(t, h, false);
+
+  light_val = analogRead(PHOTORES);
 
   Serial.print(F("Humidity: "));
   Serial.print(h);
