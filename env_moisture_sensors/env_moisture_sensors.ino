@@ -43,7 +43,6 @@ void loop() {
   int m=0; //value for moisture sensor readings/avg calculations
 
   for (int i = 0; i < 10; i++) {
-    delay(1000);
     delay(300);
 
     // Reading temperature or humidity takes about 250 milliseconds!
@@ -71,10 +70,6 @@ void loop() {
 
   if(analogRead(MOISTURE_PIN) < MOISTURE_LED_THRESHOLD) {
     digitalWrite(LED_PIN, HIGH);
-  } 
-  else {
-    digitalWRITE(LED_PIN, LOW);
-  }
     } 
     else {
       digitalWRITE(LED_PIN, LOW);
