@@ -62,7 +62,7 @@ void loop() {
     digitalWrite(LED_PIN, HIGH);
   } 
   else {
-    digitalWRITE(LED_PIN, LOW);
+    digitalWrite(LED_PIN, LOW);
   }
 
   //calculate average values for moisture probe
