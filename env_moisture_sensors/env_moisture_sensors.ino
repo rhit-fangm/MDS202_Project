@@ -34,6 +34,7 @@ void loop() {
   // Read temperature as Fahrenheit (isFahrenheit = true)
   float f = dht.readTemperature(true);
 
+
   // Check if any reads failed and exit early (to try again).
   if (isnan(h) || isnan(t) || isnan(f)) {
     Serial.println(F("Failed to read from DHT sensor!"));
@@ -44,7 +45,6 @@ void loop() {
 
   for (int i = 0; i < 10; i++) {
     delay(300);
-
     // Reading temperature or humidity takes about 250 milliseconds!
     // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
     h += dht.readHumidity();
@@ -56,10 +56,11 @@ void loop() {
     m += analogRead(MOISTURE_PIN);
   }
 
-    }
+
   h = h/10;
   t = t/10;
   f = f/10;
+  m = m/10;
 
   // Compute heat index in Fahrenheit (the default)
   float hif = dht.computeHeatIndex(f, h);
@@ -70,35 +71,14 @@ void loop() {
 
   if(analogRead(MOISTURE_PIN) < MOISTURE_LED_THRESHOLD) {
     digitalWrite(LED_PIN, HIGH);
-    } 
-    else {
+  } 
+  else {
       digitalWRITE(LED_PIN, LOW);
-    }
-
-<<<<<<< Updated upstream
-  //calculate average values for moisture probe
-  int nums[10];
-  for (int i=0; i<10; i++) {
-    nums[i] = analogRead(MOISTURE_PIN);
-    delay(100);
   }
-  int sum=0;
-  int avg=0;
-  for (int i=0; i<10; i++) {
-    sum+=nums[i];
-  }
-  avg=sum/10;
-  Serial.print("Moisture (avg): ");
-  Serial.println(avg);
 
-=======
   //calculate average value for moisture probe readings
-  m=m/10;
-
   Serial.print("Soil moisture (avg): ");
   Serial.println(m);
-
->>>>>>> Stashed changes
   Serial.print(F("Humidity: "));
   Serial.print(h);
   Serial.print(F("%  Temperature: "));
